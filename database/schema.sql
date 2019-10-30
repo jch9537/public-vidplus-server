@@ -3,27 +3,27 @@ CREATE DATABASE vidplus;
 USE vidplus;
 
 CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(255),
-  password VARCHAR(255),
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   name VARCHAR(255)
 );
 
 CREATE TABLE spaces (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  url VARCHAR(255),
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  url VARCHAR(255) NOT NULL,
   name VARCHAR(255)
 );
 
 CREATE TABLE notes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  space_id INT,
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  space_id INT NOT NULL,
   timestamp TIME,
   content TEXT
 );
 
 CREATE TABLE shared (
-  user_id INT,
-  space_id INT,
+  user_id INT NOT NULL,
+  space_id INT NOT NULL,
   PRIMARY KEY (user_id, space_id)
 );
