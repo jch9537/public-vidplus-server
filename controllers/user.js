@@ -1,12 +1,19 @@
-const conn = require('../database/connection');
+const crypto = require('crypto');
+const userModel = require('../models/user');
 
 module.exports = {
   signup: (req, res) => {
-    const sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
-    const arg = [req.body.email, req.body.password, req.body.name];
-    conn.query(sql, arg, (err, results) => {
+    console.log(`[Ctrl.User][Request:${JSON.stringify(req.body)}]`);
+    // Controller 핸들링
+    const args = {
+      email: req.body.email,
+      password: req.body.password,
+      name: req.body.name
+    };
+    // Model 호출
+    userModel.signup(args, (err, data) => {
       if (err) res.status(500).send(err);
-      res.status(201).send(results);
+      else res.status(201).json(data.insertId);
     });
   },
   signin: (req, res) => {

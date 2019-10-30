@@ -1,9 +1,9 @@
 const mysql = require('mysql');
 
 const conn = mysql.createConnection({
-  user: 'root',
-  password: 'vidplus',
-  database: 'vidplus'
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
 });
 conn.connect();
 
