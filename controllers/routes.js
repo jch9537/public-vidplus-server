@@ -11,14 +11,14 @@ routes.put('/user', userCtrl.put);
 routes.delete('/user', userCtrl.delete);
 
 routes.get('/spaces', spaceCtrl.get);
-routes.get('/spaces/:space_id', spaceCtrl.getOne);
+routes.get('/spaces/:spaceId', spaceCtrl.getOne);
 routes.post('/spaces', spaceCtrl.post);
-routes.put('/spaces/:space_id', spaceCtrl.put);
-routes.delete('/spaces/:space_id', spaceCtrl.delete);
+routes.put('/spaces/:spaceId', spaceCtrl.put);
+routes.delete('/spaces/:spaceId', spaceCtrl.delete);
 
 routes.get('/notes', noteCtrl.get);
 routes.post('/notes', noteCtrl.post);
-routes.put('/notes/:note_id', noteCtrl.put);
-routes.delete('/notes/:note_id', noteCtrl.delete);
+routes.put('/notes/:noteId', noteCtrl.put);
+routes.delete('/notes/:noteId', noteCtrl.delete);
 
 module.exports = routes;
