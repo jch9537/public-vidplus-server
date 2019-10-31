@@ -21,6 +21,24 @@ module.exports = {
         else callback(null, results);
       });
     },
-    put: (args, callback) => {},
-    delete: (args, callback) => {}
+    put: ({id, timestamp, content}, callback) => {
+      console.log(`[Model.Note][Param:${id}, ${timestamp}, ${content}]`);
+      const sql = 'UPDATE notes SET timestamp = ?, content = ? WHERE id = ?;';
+      const arg = [timestamp, content, id];
+      console.log(`[Model.Note][SQL:${sql}]`);
+      conn.query(sql, arg, (err, results) => {
+        if (err) callback(err, null);
+        else callback(null, results);
+      });
+    },
+    delete: ({id}, callback) => {
+      console.log(`[Model.Note][Param:${id}]`);
+      const sql = 'DELETE FROM notes WHERE id = ?;';
+      const arg = [id];
+      console.log(`[Model.Note][SQL:${sql}]`);
+      conn.query(sql, arg, (err, results) => {
+        if (err) callback(err, null);
+        else callback(null, results);
+      });
+    }
   }

@@ -41,9 +41,29 @@ module.exports = {
     });
   },
   put: (req, res) => {
-    res.status(201).send('Put Space');
+    console.log(`[Ctrl.Space][Request:${JSON.stringify(req.params)}]`);
+    // Controller 핸들링
+    const args = {
+      id: req.params.spaceId,
+      name: req.body.name
+    };
+    // Model 호출
+    spaceModel.put(args, (err, data) => {
+      if (err) res.status(500).send(err);
+      else res.status(201).json({id: args.id, url: 'TBD', name: args.name});
+    });
   },
   delete: (req, res) => {
-    res.status(201).send('Delete Space');
+    console.log(`[Ctrl.Space][Request:${JSON.stringify(req.params)}]`);
+    // Controller 핸들링
+    const args = { 
+      id: req.params.spaceId,
+      userId: req.session.userId 
+    };
+    // Model 호출
+    spaceModel.delete(args, (err, data) => {
+      if (err) res.status(500).send(err);
+      else res.status(201).send('Space deleted.');
+    });
   }
 }

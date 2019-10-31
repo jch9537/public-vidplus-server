@@ -28,9 +28,29 @@ module.exports = {
     });
   },
   put: (req, res) => {
-    res.status(201).send('Put a Note');
+    console.log(`[Ctrl.Note][Request:${JSON.stringify(req.body)}]`);
+    // Controller 핸들링
+    const args = {
+      id: req.params.noteId,
+      timestamp:req.body.timestamp,
+      content: req.body.content
+    };
+    // Model 호출
+    noteModel.put(args, (err, data) => {
+      if (err) res.status(500).send(err);
+      else res.status(201).json({id: args.id, space_id: 'TBD', timestamp: args.timestamp, content: args.content});
+    });
   },
   delete: (req, res) => {
-    res.status(201).send('Delete a Note');
+    console.log(`[Ctrl.Note][Request:${JSON.stringify(req.params)}]`);
+    // Controller 핸들링
+    const args = {
+      id: req.params.noteId
+    };
+    // Model 호출
+    noteModel.delete(args, (err, data) => {
+      if (err) res.status(500).send(err);
+      else res.status(201).send('Note deleted.');
+    });
   }
 }
