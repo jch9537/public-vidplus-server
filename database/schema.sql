@@ -6,8 +6,10 @@ CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  name VARCHAR(255)
+  name VARCHAR(255),
+  UNIQUE (email)
 );
+-- email 중복안됨 하지만 에러리퀘스트도 카운터가 올라가는 단점
 
 CREATE TABLE spaces (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
