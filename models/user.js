@@ -1,7 +1,7 @@
 const conn = require('../database/connection');
 
 module.exports = {
-    signup: ({email, password, name}, callback) => {  
+    signup: ({email, password, name}, callback) => { 
       // console.log(`[Model.User][Param:{${email}, ${password}, ${name}}]`);
       const sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
       const arg = [email, password, name];
@@ -24,8 +24,16 @@ module.exports = {
     // signout: (args, callback) => {
     //  sessionId로 해서 필요없을 것 같음
     // },
-    get: (args, callback) => {
-
+    get: (id, callback) => {
+      const sql = `SELECT * FROM users WHERE id='${id}'`;
+      console.log('에스큐엘 :', sql)
+      conn.query(sql, (err, result) => {
+        if(err){
+          callback(err, null);
+        } else {
+          callback(null, result);
+        }
+      });
     },
     put: (args, callback) => {
 
