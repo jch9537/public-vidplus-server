@@ -1,7 +1,15 @@
 const routes = require('express').Router();
+const passport = require('passport');
 const userCtrl = require('./user');
 const spaceCtrl = require('./space');
 const noteCtrl = require('./note');
+
+routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+routes.get('/OAuth/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
 
 routes.post('/user/signup', userCtrl.signup);
 routes.post('/user/signin', userCtrl.signin);
