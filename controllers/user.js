@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const userModel = require('../models/user');
 
 module.exports = {
+  // 전체 에러분기 다시 확인!!
   signup: (req, res) => {
     const data = req.body
     // console.log(`[Ctrl.User][Request:${JSON.stringify(req.body)}]`);
@@ -15,8 +16,11 @@ module.exports = {
     };
     // Model 호출
     userModel.signup(args, (err, data) => {
-      if (err) res.status(500).send(err);
-      else res.status(201).json(data.insertId);
+      if (err) {
+        res.status(500).send(err)
+      } else {
+        res.status(201).json(data.insertId)
+      };
     });
   },
   signin: (req, res) => {
@@ -43,6 +47,7 @@ module.exports = {
   },
   signout: (req, res) => {
     const sess  = req.session;
+    // req.session.userid = 1
     if(sess.userid) {
       req.session.destroy(err => {
         if(err) {
@@ -52,11 +57,29 @@ module.exports = {
         }
       })
     } else {
-      res.redirect(200, '/');
+      res.redirect(200,'/');
     }
   },
   get: (req, res) => {
-    res.status(200).send('Get User');
+    // const sess = req.session;
+    req.session.userid = 3;
+    let args = sess.userid;
+    if(sess.userid){
+      userModel.get(args, (err, result) => {
+        if(err){
+          res.status(401).send('Not Logged In.');
+        } else {
+          // console.log('에쎄쓰 :', sess);
+          console.log('리절트 :', result)
+          let data = {};
+          data.email = result[0].email;
+          data.name = result[0].name
+          res.status(200).send(data);
+        }
+      })
+    } else {
+      res.status(401).send('Not Logged In.')
+    } 
   },
   put: (req, res) => {
     res.status(201).send('Put User');
