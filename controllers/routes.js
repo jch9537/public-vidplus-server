@@ -5,7 +5,7 @@ const spaceCtrl = require('./space');
 const noteCtrl = require('./note');
 
 routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
-routes.get('/OAuth/callback', 
+routes.get('/auth/callback', 
   passport.authenticate('google', { failureRedirect: '/signin' }),
   function(req, res) {
     res.redirect('/');
