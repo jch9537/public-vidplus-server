@@ -1,44 +1,42 @@
 const conn = require('../database/connection');
 
 module.exports = {
-    get: ({spaceId}, callback) => {  
-      console.log(`[Model.Note][Param:${spaceId}]`);
-      const sql = 'SELECT id, space_id, timestamp, content FROM notes WHERE space_id = ?;';
-      const arg = [spaceId];
-      console.log(`[Model.Note][SQL:${sql}]`);
+    get: ({spaceId, userId}, callback) => {  
+      const sql = 'SELECT id, space_id, timestamp, content FROM notes WHERE space_id = (SELECT space_id FROM shared WHERE space_id = ? AND user_id = ?);';
+      const arg = [spaceId, userId];
       conn.query(sql, arg, (err, results) => {
-        if (err) callback(err, null);
-        else callback(null, results);
+        if (err) return callback(err, null);
+        return callback(null, results);
       });
     },
     post: ({spaceId, timestamp, content}, callback) => {
-      console.log(`[Model.Note][Param:${spaceId}, ${timestamp}, ${content}]`);
       const sql = 'INSERT INTO notes (space_id, timestamp, content) VALUES (?, ?, ?);';
       const arg = [spaceId, timestamp, content];
-      console.log(`[Model.Note][SQL:${sql}]`);
       conn.query(sql, arg, (err, results) => {
-        if (err) callback(err, null);
-        else callback(null, results);
+        if (err) return callback(err, null);
+        return callback(null, results);
       });
     },
     put: ({id, timestamp, content}, callback) => {
-      console.log(`[Model.Note][Param:${id}, ${timestamp}, ${content}]`);
       const sql = 'UPDATE notes SET timestamp = ?, content = ? WHERE id = ?;';
       const arg = [timestamp, content, id];
-      console.log(`[Model.Note][SQL:${sql}]`);
       conn.query(sql, arg, (err, results) => {
-        if (err) callback(err, null);
-        else callback(null, results);
+        if (err) return callback(err, null);
+        return callback(null, results);
       });
     },
-    delete: ({id}, callback) => {
-      console.log(`[Model.Note][Param:${id}]`);
-      const sql = 'DELETE FROM notes WHERE id = ?;';
-      const arg = [id];
-      console.log(`[Model.Note][SQL:${sql}]`);
+    delete: ({id, userId}, callback) => {
+      let sql = 'SELECT user_id FROM shared WHERE user_id = ? AND space_id = (SELECT space_id FROM notes WHERE id = ?);'
+      let arg = [userId, id];
       conn.query(sql, arg, (err, results) => {
-        if (err) callback(err, null);
-        else callback(null, results);
+        if (err) return callback(err, null);
+        if (!results.length) return callback('no match', null);
+        sql = 'DELETE FROM notes WHERE id = ?;';
+        arg = [id];
+        conn.query(sql, arg, (err, results) => {
+          if (err) return callback(err, null);
+          return callback(null, results);
+        });
       });
     }
   }

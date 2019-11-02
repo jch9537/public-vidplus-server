@@ -4,9 +4,9 @@ const userCtrl = require('./user');
 const spaceCtrl = require('./space');
 const noteCtrl = require('./note');
 
-routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 routes.get('/OAuth/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/signin' }),
   function(req, res) {
     res.redirect('/');
   });
