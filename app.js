@@ -29,9 +29,11 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 },
 function(accessToken, refreshToken, profile, done) {
-     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-       return done(err, user);
-     });
+   
+     console.log(profile);
+
+     // displayName
+     // emails[0].value
 }
 ));
 
