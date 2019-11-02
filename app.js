@@ -30,10 +30,7 @@ passport.use(new GoogleStrategy({
 },
 function(accessToken, refreshToken, profile, done) {
    
-     console.log(profile);
-
-     // displayName
-     // emails[0].value
+  done(null, null);
 }
 ));
 

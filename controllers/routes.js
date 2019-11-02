@@ -6,7 +6,7 @@ const noteCtrl = require('./note');
 
 routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 routes.get('/auth/callback', 
-  passport.authenticate('google', { failureRedirect: '/signin' }),
+  passport.authenticate('google', { failureRedirect: '/user/signin' }),
   function(req, res) {
     res.redirect('/');
   });
