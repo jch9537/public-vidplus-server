@@ -27,7 +27,7 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 }, (accessToken, refreshToken, profile, done) => {
-  app.set('email', profile.emails[0].value);
+//  app.set('email', profile.emails[0].value);
   done(null, profile);
 }));
   
