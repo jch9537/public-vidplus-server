@@ -5,6 +5,7 @@ const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const routes = require("./controllers/routes");
+const oauth = require("./controllers/oauth");
 
 const app = express();
 const port = process.env.SRV_PORT;
@@ -27,10 +28,8 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 }, (accessToken, refreshToken, profile, done) => {
-  console.log('googlestrategy');
-  done(null, profile);
-}
-));
+  oauth.signinOrSignup(profile, done);
+}));
   
 app.use(express.json());
 app.use("/", routes);
