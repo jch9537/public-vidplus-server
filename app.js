@@ -35,8 +35,8 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
     function(accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      return done(null, 'ok');
+      //console.log(profile);
+      //return done(null, 'ok');
       // displayName
       // emails[0].value
     }
@@ -44,10 +44,16 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
+
+  console.log('!!!!!!!');
+
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
+
+  console.log('????????');
+
   done(null, user);
 });
 
