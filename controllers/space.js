@@ -19,7 +19,7 @@ module.exports = {
     });
   },
   post: (req, res) => {
-    if (!req.session.userid) return res.status(401).send({error: {status: 401, message: '본인 인증을 한 후 스페이스 목록을 가져올 수 있습니다.'}});
+    if (!req.session.userid) return res.status(401).send({error: {status: 401, message: '본인 인증을 한 후 스페이스를 생성할 수 있습니다.'}});
     if (!req.body.url || !req.body.name) return res.status(400).send({error: {status: 400, message: 'body를 다음과 같이 수정해주세요: {url, name}'}});
     const args = {
       url: req.body.url,

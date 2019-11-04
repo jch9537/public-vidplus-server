@@ -8,7 +8,7 @@ routes.get('/auth/google', passport.authenticate('google', { scope: ['https://ww
 routes.get('/auth/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/auth/confirm');
   });
 
 routes.post('/user/signup', userCtrl.signup);

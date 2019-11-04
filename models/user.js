@@ -19,26 +19,35 @@ module.exports = {
         if(err) callback(err, null);
         else(callback(null, results))
       })
-
     },
-    // signout: (args, callback) => {
-    //  sessionId로 해서 필요없을 것 같음
-    // },
     get: (id, callback) => {
       const sql = `SELECT * FROM users WHERE id='${id}'`;
-      console.log('에스큐엘 :', sql)
+      // console.log('에스큐엘 :', sql)
       conn.query(sql, (err, result) => {
         if(err){
           callback(err, null);
-        } else {
-          callback(null, result);
-        }
+        } else callback(null, result);
       });
     },
-    put: (args, callback) => {
-
+    put: ({email, password, name}, callback) => {
+      let sql = `UPDATE users SET password='${password}', name='${name}' WHERE email='${email}';`
+      conn.query(sql, (err, results) => {
+        if(err) callback(err, null);
+        else callback(null, results);
+      })
     },
-    delete: (args, callback) => {
-
+    delete: (id, callback) => {
+      //아래 let과 const에 대해서 
+      let sql =  `DELETE FROM users WHERE id='${id}';`
+      conn.query(sql, (err, results) => {
+        if(err) callback(err, null);
+        else {
+          sql = `DELETE FROM shared WHERE user_id='${id}';`
+          conn.query(sql, (err, results) => {
+            if(err) callback(err, null); 
+            else callback(null, results);                
+          })
+        }
+      })
     }
   }
