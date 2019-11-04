@@ -6,10 +6,10 @@ const noteCtrl = require('./note');
 
 routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 routes.get('/auth/callback', 
-  passport.authenticate('google', { session: false, failureRedirect: process.env.CLNT_ORIGIN+'/aaa'}),
+  passport.authenticate('google', { session: false, failureRedirect: `${process.env.CLNT_ORIGIN}/` }),
   (req, res) => {
     console.log('redirecting');
-    res.redirect(process.env.CLNT_ORIGIN + '/abc');
+    res.redirect(`${process.env.CLNT_ORIGIN}/`);
   });
 
 routes.get('/auth/success', userCtrl.get);
