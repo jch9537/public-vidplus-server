@@ -1,8 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-
-
 app.use(passport.initialize());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -15,7 +13,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(profile, done) {
-  console.log(profile+'!!!');
+  console.log(JSON.stringify(profile));
   done(null, profile);
 });
   
