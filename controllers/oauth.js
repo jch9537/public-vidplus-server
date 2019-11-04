@@ -9,7 +9,7 @@ module.exports = {
 
 
 
-    const sql = `SELECT id FROM users WHERE email = ${profile.emails[0].value};`;
+    const sql = `SELECT id FROM users WHERE email = '${profile.emails[0].value}';`;
     conn.query(sql, (err, results) => {
       if (err) return callback(err, null);
 
