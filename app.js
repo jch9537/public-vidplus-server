@@ -26,6 +26,7 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
 passport.use(
   new GoogleStrategy(
     {
