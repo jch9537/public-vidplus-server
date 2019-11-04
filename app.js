@@ -26,9 +26,15 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
-}, (accessToken, refreshToken, profile, done) => done(null, profile)
+}, (accessToken, refreshToken, profile, done) => {
+  console.log('googlestrategy');
+  done(null, profile);
+}
 ));
-passport.serializeUser((profile, done) => done(null, profile));
+passport.serializeUser((profile, done) => {
+  console.log('serializeUser');
+  done(null, profile);  
+});
   
 app.use(express.json());
 app.use("/", routes);
