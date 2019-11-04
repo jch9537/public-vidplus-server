@@ -2,12 +2,6 @@ const spaceModel = require('../models/space');
 
 module.exports = {
   get: (req, res) => {
-
-
-    console.log(req.session.userid);
-
-
-
     if (!req.session.userid) return res.status(401).send({error: {status: 401, message: '본인 인증을 한 후 스페이스 목록을 가져올 수 있습니다.'}});
     const args = { 
       userId: req.session.userid 
