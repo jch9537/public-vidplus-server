@@ -31,10 +31,6 @@ passport.use(new GoogleStrategy({
   done(null, profile);
 }
 ));
-passport.serializeUser((profile, done) => {
-  console.log('serializeUser');
-  done(null, profile);  
-});
   
 app.use(express.json());
 app.use("/", routes);
