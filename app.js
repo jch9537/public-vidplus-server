@@ -37,12 +37,20 @@ passport.use(
     function(accessToken, refreshToken, profile, done) {
       console.log(profile);
       return done(null, 'ok');
-
       // displayName
       // emails[0].value
     }
   )
 );
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 
 app.use(express.json());
 app.use("/", routes);
