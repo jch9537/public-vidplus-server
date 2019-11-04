@@ -11,8 +11,8 @@ module.exports = {
       session.userid = results[0].id;
 
 
-      console.log(results);
-      return null;
+
+      callback(null, results[0].id);
       
     });
 
