@@ -36,9 +36,7 @@ passport.use(
     },
     function(accessToken, refreshToken, profile, done) {
       //console.log(profile);
-      return done(null, 'ok');
-      // displayName
-      // emails[0].value
+      done(null, 'ok');
     }
   )
 );

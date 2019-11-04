@@ -6,10 +6,12 @@ const noteCtrl = require('./note');
 
 routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 routes.get('/auth/callback', 
-  passport.authenticate('google', { failureRedirect: '/auth/nak' }),
+  passport.authenticate('google', { failureRedirect: '/auth/failure' }),
   function(req, res) {
-    res.redirect('/auth/ack');
+    res.redirect('/auth/success');
   });
+
+routes.get('/auth/success', userCtrl.get);
 
 routes.post('/user/signup', userCtrl.signup);
 routes.post('/user/signin', userCtrl.signin);
