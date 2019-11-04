@@ -26,7 +26,10 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
-}, (accessToken, refreshToken, profile, done) => done(null, profile)));
+}, (accessToken, refreshToken, profile, done) => {
+  app.set('email', profile.emails[0].value);
+  done(null, profile);
+}));
   
 app.use(express.json());
 app.use("/", routes);
