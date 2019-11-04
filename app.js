@@ -40,7 +40,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(profile, done) {
-  console.log(profile+'!!!');
+  console.log(JSON.stringify(profile));
   done(null, profile);
 });
   
