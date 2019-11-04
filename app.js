@@ -3,8 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const routes = require("./controllers/routes");
 
 const app = express();
@@ -25,36 +23,6 @@ app.use(
     saveUninitialized: true // 세션이 저장되기 전에 uninitialized 상태로 만들어 저장
   })
 );
-
-app.use(passport.initialize());
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL
-    },
-    function(accessToken, refreshToken, profile, done) {
-      //console.log(profile);
-      done(null, 'ok');
-    }
-  )
-);
-
-passport.serializeUser(function(user, done) {
-
-  console.log('!!!!!!!');
-
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-
-  console.log('????????');
-
-  done(null, user);
-});
-
 
 app.use(express.json());
 app.use("/", routes);
