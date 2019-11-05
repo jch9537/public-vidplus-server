@@ -6,7 +6,7 @@ module.exports = {
     conn.query(sql, (e1, r1) => {
       if (e1) return res.redirect(`${process.env.CLNT_ORIGIN}/`);
       if (!r1.length) {
-        sql = `INSERT INTO users (email, name) VALUES ('${req.query.email}', '${req.query.name}');`;
+        sql = `INSERT INTO users (email, password, name) VALUES ('${req.query.email}', '@OAUTH', '${req.query.name}');`;
         conn.query(sql, (e2, r2) => {
           if (e2) return console.log(e2);
           req.session.userid = r2.insertId;
