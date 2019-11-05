@@ -8,7 +8,7 @@ module.exports = {
       if (!r1.length) {
         sql = `INSERT INTO users (email, name) VALUES ('${req.query.email}', '${req.query.name}');`;
         conn.query(sql, (e2, r2) => {
-          if (e2) return res.redirect(`${process.env.CLNT_ORIGIN}/`);
+          if (e2) return console.log(e2);
           req.session.userid = r2.insertId;
           return res.redirect('/spaces');
         });
