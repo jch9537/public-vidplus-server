@@ -3,7 +3,7 @@ const conn = require('../database/connection');
 module.exports = {
     signup: ({email, password, name}, callback) => { 
       // console.log(`[Model.User][Param:{${email}, ${password}, ${name}}]`);
-      const sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
+      let sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
       const arg = [email, password, name];
       // console.log(`[Model.User][SQL:${sql}]`);
       conn.query(sql, arg, (err, results) => {
@@ -11,17 +11,21 @@ module.exports = {
         else callback(null, results);
       });
     },
-    //구분해서 에러반환 있으면 사용중인 이메일이라고 알려주고 에러메세지로 구분 401이메일 중복 등...
-    //쿼리문으로 select로 먼저 날리고 있으면 중복에러메세지 띄우고 없으면 등록
     signin: ({email, password}, callback) => {
-      const sql = `SELECT * FROM users WHERE email='${email}' AND password='${password}'`
+      let sql = `SELECT * FROM users WHERE email='${email}'`
       conn.query(sql, (err, results) => {
-        if(err) callback(err, null);
-        else(callback(null, results))
+        if(err) callback('No match Email', null)
+        else {
+          sql = `SELECT * FROM users WHERE email='${email}' AND password='${password}'`
+          conn.query(sql, (err, results) => {
+            if(err) callback('No match password', null)
+            else(callback(null, results))
+          })
+        }
       })
     },
     get: (id, callback) => {
-      const sql = `SELECT * FROM users WHERE id='${id}'`;
+      let sql = `SELECT * FROM users WHERE id='${id}'`;
       // console.log('에스큐엘 :', sql)
       conn.query(sql, (err, result) => {
         if(err){
@@ -29,16 +33,25 @@ module.exports = {
         } else callback(null, result);
       });
     },
-    put: ({email, password, name}, callback) => {
-      let sql = `UPDATE users SET password='${password}', name='${name}' WHERE email='${email}';`
+    put: ({email, password, name, id}, callback) => {
+      // console.log('아규먼트 :', email,':', password,':', name, ':',id)
+      let sql = `UPDATE users SET email='${email}', password='${password}', name='${name}' WHERE id='${id}';`
+      // console.log('에스큐엘 ', sql)
       conn.query(sql, (err, results) => {
+        console.log('업데이트 에러', err)
         if(err) callback(err, null);
-        else callback(null, results);
+        else {
+          sql = `SELECT * FROM users WHERE id='${id}';`
+          conn.query(sql, (err, results) => {
+            console.log('셀렉트 에러 : ', err)
+            if(err) callback(err, null);
+            else callback(null, results);
+          })
+        }
       })
     },
     delete: (id, callback) => {
-      //아래 let과 const에 대해서 
-      let sql =  `DELETE FROM users WHERE id='${id}';`
+      let sql = `DELETE FROM users WHERE id='${id}';`
       conn.query(sql, (err, results) => {
         if(err) callback(err, null);
         else {
