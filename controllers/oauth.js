@@ -5,7 +5,7 @@ module.exports = {
 
     console.log(req.query.email);
 
-    req.session.userid = req.query.email;
+    req.session.userid = 1;
 
     console.log(`[SESSION]${req.session.userid}`);
 
