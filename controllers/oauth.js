@@ -3,7 +3,13 @@ const conn = require('../database/connection');
 module.exports = {
   signinOrSignup: (req, res) => {
 
-    return res.status(200).send('!!!');
+    console.log(req.query.email);
+
+    req.session.userid = req.query.email;
+
+    console.log(`[SESSION]${req.session.userid}`);
+
+    res.redirect(`${process.env.CLNT_ORIGIN}/spaces`);
 
 
 
