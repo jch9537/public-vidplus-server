@@ -21,7 +21,7 @@ module.exports = {
     spaceModel.getOne(args, (err, data) => {
       if (err) return res.status(500).send('스페이스 불러오기 실패');
       if (!data.length) return res.status(401).send({error: {status: 401, message: '사용자는 해당 스페이스를 불러올 수 있는 권한이 없습니다.'}});
-      return res.status(200).json(data);
+      return res.status(200).json(data[0]);
     });
     return null;
   },

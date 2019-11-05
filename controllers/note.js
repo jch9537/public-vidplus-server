@@ -16,7 +16,7 @@ module.exports = {
   },
   post: (req, res) => {
     if (!req.session.userid) return res.status(401).send({error: {status: 401, message: '본인 인증을 한 후 노트를 생성할 수 있습니다.'}});
-    if (!req.body.space_id || !req.body.timestamp || !req.body.content) return res.status(400).send({error: {status:400, message: 'body를 다음과 같이 수정해주세요: {space_id, timestamp, content}'}});
+    if (!req.body.space_id || !req.body.timestamp || (!req.body.content && req.body.content !== '')) return res.status(400).send({error: {status:400, message: 'body를 다음과 같이 수정해주세요: {space_id, timestamp, content}'}});
     const args = { 
       spaceId: req.body.space_id, 
       timestamp:req.body.timestamp, 
@@ -30,7 +30,7 @@ module.exports = {
   },
   put: (req, res) => {
     if (!req.session.userid) return res.status(401).send({error: {status: 401, message: '본인 인증을 한 후 노트를 수정할 수 있습니다.'}});
-    if (!req.body.timestamp || !req.body.content) return res.status(400).send({error: {status:400, message: 'body를 다음과 같이 수정해주세요: {timestamp, content}'}});
+    if (!req.body.timestamp || (!req.body.content && req.body.content !== '')) return res.status(400).send({error: {status:400, message: 'body를 다음과 같이 수정해주세요: {timestamp, content}'}});
     const args = {
       id: req.params.noteId,
       timestamp:req.body.timestamp,

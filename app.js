@@ -28,6 +28,7 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 }, (accessToken, refreshToken, profile, done) => {
   app.set('email', profile.emails[0].value);
+  app.set('name', profile.displayName);
   done(null, profile);
 }));
   
