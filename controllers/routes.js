@@ -1,15 +1,14 @@
 const routes = require('express').Router();
 const passport = require('passport');
+const authCtrl = require('./oauth');
 const userCtrl = require('./user');
 const spaceCtrl = require('./space');
 const noteCtrl = require('./note');
 
 routes.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
-routes.get('/OAuth/callback', 
-  passport.authenticate('google', { failureRedirect: '/signin' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+routes.get('/auth/callback', 
+  passport.authenticate('google', { session: false }), (req, res) => res.redirect(`/auth/signinOrSignup?email=${req.app.get('email')}`));
+routes.get('/auth/signinOrSignup', authCtrl.signinOrSignup);
 
 routes.post('/user/signup', userCtrl.signup);
 routes.post('/user/signin', userCtrl.signin);
