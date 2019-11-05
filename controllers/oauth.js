@@ -8,26 +8,15 @@ module.exports = {
       if (!r1.length) {
         sql = `INSERT INTO users (email, password, name) VALUES ('${req.query.email}', '@OAUTH', '${req.query.name}');`;
         conn.query(sql, (e2, r2) => {
-          if (e2) return console.log(e2);
+          if (e2) return res.redirect(`${process.env.CLNT_ORIGIN}/`);
           req.session.userid = r2.insertId;
-          return res.redirect('/spaces');
+          return res.redirect(`${process.env.CLNT_ORIGIN}/`);
         });
       } else {
         req.session.userid = r1[0].id;
-        return res.redirect('/spaces');
+        return res.redirect(`${process.env.CLNT_ORIGIN}/`);
       }
-      
-
+      return null;;
     });
-
-
-
-
-
-
-
-
-
-
   }
 }
