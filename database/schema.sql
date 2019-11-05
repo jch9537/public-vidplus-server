@@ -21,7 +21,7 @@ CREATE TABLE notes (
   id INT PRIMARY KEY AUTO_INCREMENT,
   space_id INT NOT NULL,
   timestamp VARCHAR(255) NOT NULL,
-  content TEXT NOT NULL
+  content TEXT
 );
 
 CREATE TABLE shared (
