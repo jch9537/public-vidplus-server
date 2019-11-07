@@ -1,9 +1,9 @@
 const conn = require('../database/connection');
 
 module.exports = {
-    signup: ({ email, password, name }, callback) => { 
-      let sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
-      const arg = [email, password, name];
+    signup: ({ email, password, name, oauth_signup }, callback) => { 
+      let sql = 'INSERT INTO users (email, password, name, oauth_signup) VALUES (?, ?, ?, ?);';
+      const arg = [email, password, name, oauth_signup];
       conn.query(sql, arg, (err, results) => {
         if (err) callback(err, null);
         else callback(null, results);
