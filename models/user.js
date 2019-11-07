@@ -1,7 +1,7 @@
 const conn = require('../database/connection');
 
 module.exports = {
-    signup: ({email, password, name}, callback) => { 
+    signup: ({ email, password, name }, callback) => { 
       let sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?);';
       const arg = [email, password, name];
       conn.query(sql, arg, (err, results) => {
@@ -10,7 +10,7 @@ module.exports = {
       });
     },
 
-    signin: ({email, password}, callback) => {
+    signin: ({ email, password }, callback) => {
       let sql = `SELECT * FROM users WHERE email='${email}'`
       conn.query(sql, (err, results) => {
         if(err) callback(err, null);
@@ -30,16 +30,38 @@ module.exports = {
       })
     },
 
+    sendPassword: ({ email, name }, callback) => {
+      let sql = `SELECT * FROM users WHERE email='${email}';`
+      conn.query(sql, (err, results) => {
+        if(err) callback(err, null);
+        else {
+          if(!results.length) callback(null, 'No match Email');
+          else {
+            sql = `SELECT * FROM users WHERE email='${email}' AND name='${name}';`
+            conn.query(sql, (err, results) => {
+              if(err) callback(err, null);
+              else {
+                if(!results.length) callback(null, 'No match Name');
+                else {
+                  callback(null, results)
+                }
+              }
+            })
+          }
+        }
+      })
+    },
+
     get: (id, callback) => {
       let sql = `SELECT * FROM users WHERE id='${id}'`;
-      conn.query(sql, (err, result) => {
+      conn.query(sql, (err, results) => {
         if(err){
           callback(err, null);
-        } else callback(null, result);
+        } else callback(null, results);
       });
     },
 
-    put: ({email, password, name, id}, callback) => {
+    put: ({ email, password, name, id }, callback) => {
       let sql = `UPDATE users SET email='${email}', password='${password}', name='${name}' WHERE id='${id}';`
       conn.query(sql, (err, results) => {
         if(err) callback(err, null);
