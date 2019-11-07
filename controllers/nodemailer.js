@@ -19,13 +19,13 @@ module.exports = {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: '보낼메일주소',      // 보내는 gmail 계정 아이디를 입력 ex) 'jch9537@gmail.com'
-                pass: '*****'             // 보내는 gmail 계정의 비밀번호를 입력 ex) abc123!! 저의 비번을 적기 좀 그래서 ..ㅎㅎ
+                user: process.env.NML_EMAIL,         // 보내는 gmail 계정 아이디를 입력 ex) 'jch9537@gmail.com'
+                pass: process.env.NML_PASSWORD            // 보내는 gmail 계정의 비밀번호를 입력 ex) abc123!! 저의 비번을 적기 좀 그래서 ..ㅎㅎ
             }                
         });
         // 메일 옵션
         let mailOptions = {
-            from: '위의 보낼 메일 주소',                                    // 발송 메일 주소  ex) 'jch9537@gmail.com'
+            from: process.env.NML_EMAIL,                                   // 발송 메일 주소  ex) 'jch9537@gmail.com'
             to: param.email ,                                             // 수신 메일 주소
             subject: 'VIDPLUS Sending Password Email using Node.js',      // 제목
             html: `<h2>vidplus 임시 비밀번호입니다.</h2>                    
