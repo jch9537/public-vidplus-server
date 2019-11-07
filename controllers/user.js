@@ -105,7 +105,6 @@ module.exports = {
   },
 
   get: (req, res) => {
-    req.session.userid = 1;
     const args = req.session.userid;
     if (!req.session.userid) {
       res.status(401).send({error: {status: 401, message: "회원정보를 가져오기 위해 sign in이 필요합니다."}})
