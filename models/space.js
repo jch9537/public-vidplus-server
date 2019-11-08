@@ -2,7 +2,7 @@ const conn = require('../database/connection');
 
 module.exports = {
     get: ({userId}, callback) => {  
-      const sql = `SELECT id, url, name, DATE_FORMAT(updatedAt, '%r') AS updatedAt FROM spaces, shared 
+      const sql = `SELECT id, url, name, DATE_FORMAT(DATE_ADD(updatedAt, INTERVAL 9 HOUR), '%Y-%m-%d %h:%i %p') AS updatedAt FROM spaces, shared 
                    WHERE spaces.id = shared.space_id AND shared.user_id = ?;`;
       const arg = [userId];
       conn.query(sql, arg, (err, results) => {
