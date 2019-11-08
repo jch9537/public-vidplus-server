@@ -92,7 +92,7 @@ module.exports = {
     };
     noteModel.put(args, err => {
       if (err === 0)
-        return res.status(401).send({
+        return res.status(404).send({
           error: {
             status: 404,
             message: "해당 id를 가진 노트를 찾을 수가 없습니다."
@@ -130,7 +130,7 @@ module.exports = {
       id: Number(req.params.noteId),
       userId: req.session.userid
     };
-    noteModel.delete(args, (err, data) => {
+    noteModel.delete(args, (err) => {
       if (err === 0)
         return res.status(404).send({
           error: {
@@ -149,13 +149,6 @@ module.exports = {
         return res
           .status(500)
           .send({ error: { status: 500, message: "노트 삭제 실패" } });
-      if (!data.affectedRows)
-        return res.status(404).send({
-          error: {
-            status: 404,
-            message: "해당 id를 가진 노트를 찾을 수가 없습니다."
-          }
-        });
       return res.status(200).send({ id: args.id, deleted: true });
     });
     return null;
