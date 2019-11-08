@@ -124,7 +124,7 @@ module.exports = {
               message: "사용자는 해당 스페이스에 대한 수정 권한이 없습니다."
             }
           });
-      return res.status(200).json({ id: args.id, url: "TBD", name: args.name });
+      return res.status(200).json({ id: args.id, url: req.body.url, name: args.name });
     });
     return null;
   },
