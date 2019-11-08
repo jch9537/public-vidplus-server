@@ -1,4 +1,4 @@
 {
   "extends": ["airbnb", "prettier"],
-  "rules": { "no-console": 0 }
+  "rules": { "no-console": 0, "no-plusplus": 0 }
 }
