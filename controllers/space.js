@@ -82,7 +82,7 @@ module.exports = {
         return res
           .status(500)
           .send({ error: { status: 500, message: "스페이스 생성 실패" } });
-      return res.status(201).json({ id: data, url: args.url, name: args.name });
+      return res.status(201).json(data[0]);
     });
     return null;
   },
@@ -111,20 +111,19 @@ module.exports = {
       userId: req.session.userid
     };
     spaceModel.put(args, (err, data) => {
+      if (err === 0)
+        return res
+          .status(404)
+          .send({ error: { status: 404, message: "해당 id를 가진 스페이스를 찾을 수가 없습니다." } });
+      if (err === 1)
+        return res
+          .status(401)
+          .send({ error: { status: 401, message: "사용자는 해당 스페이스에 대한 수정 권한이 없습니다." } });
       if (err)
         return res
           .status(500)
           .send({ error: { status: 500, message: "스페이스 수정 실패" } });
-      if (!data.affectedRows)
-        return res
-          .status(401)
-          .send({
-            error: {
-              status: 401,
-              message: "사용자는 해당 스페이스에 대한 수정 권한이 없습니다."
-            }
-          });
-      return res.status(200).json({ id: args.id, url: req.body.url, name: args.name });
+      return res.status(200).json(data[0]);
     });
     return null;
   },
@@ -142,20 +141,19 @@ module.exports = {
       id: Number(req.params.spaceId),
       userId: req.session.userid
     };
-    spaceModel.delete(args, (err, data) => {
+    spaceModel.delete(args, (err) => {
+      if (err === 0)
+        return res
+          .status(404)
+          .send({ error: { status: 404, message: "해당 id를 가진 스페이스를 찾을 수가 없습니다." } });
+      if (err === 1)
+        return res
+          .status(401)
+          .send({ error: { status: 401, message: "사용자는 해당 스페이스에 대한 삭제 권한이 없습니다." } });
       if (err)
         return res
           .status(500)
           .send({ error: { status: 500, message: "스페이스 삭제 실패" } });
-      if (!data.affectedRows)
-        return res
-          .status(401)
-          .send({
-            error: {
-              status: 401,
-              message: "사용자는 해당 스페이스에 대한 삭제 권한이 없습니다."
-            }
-          });
       return res.status(200).send({ id: args.id, deleted: true });
     });
     return null;
