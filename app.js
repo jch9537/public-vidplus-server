@@ -4,6 +4,7 @@ const cors = require("cors");
 const session = require("express-session");
 const morgan = require("morgan");
 const passport = require("passport");
+const { google } = require("googleapis");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const routes = require("./controllers/routes");
 
@@ -47,6 +48,14 @@ passport.use(
       app.set("name", profile.displayName);
       done(null, profile);
     }
+  )
+);
+app.set(
+  "docsClient",
+  new google.auth.OAuth2(
+    process.env.DOCS_CLIENT_ID,
+    process.env.DOCS_CLIENT_SECRET,
+    process.env.DOCS_CALLBACK_URL
   )
 );
 
