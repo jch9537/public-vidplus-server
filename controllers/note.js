@@ -94,6 +94,13 @@ module.exports = {
       if (err === 0)
         return res.status(401).send({
           error: {
+            status: 404,
+            message: "해당 id를 가진 노트를 찾을 수가 없습니다."
+          }
+        });
+      if (err ===1)
+        return res.status(401).send({
+          error: {
             status: 401,
             message: "사용자는 해당 노트에 대한 수정 권한이 없습니다."
           }
@@ -125,6 +132,13 @@ module.exports = {
     };
     noteModel.delete(args, (err, data) => {
       if (err === 0)
+        return res.status(404).send({
+          error: {
+            status: 404,
+            message: "해당 id를 가진 노트를 찾을 수가 없습니다."
+          }
+        });
+      if (err === 1) 
         return res.status(401).send({
           error: {
             status: 401,

@@ -19,33 +19,42 @@ module.exports = {
     });
   },
   put: ({ userId, id, spaceId, timestamp, content }, callback) => {
-    let sql = `SELECT user_id FROM shared 
-                 WHERE user_id = ? AND space_id = ?;`;
-    let arg = [userId, spaceId];
-    conn.query(sql, arg, (e1, r1) => {
+    let sql = `SELECT id FROM notes WHERE id = ${id};`;
+    conn.query(sql, (e1, r1) => {
       if (e1) return callback(e1, null);
       if (!r1.length) return callback(0, null);
-      sql = `UPDATE notes SET timestamp = ?, content = ?, space_id = ? WHERE id = ?;`;
-      arg = [timestamp, content, spaceId, id];
-      conn.query(sql, arg, (e2, r2) => {
-        if (e2) return callback(e2, null);
-        return callback(null, r2);
+      sql = `SELECT user_id FROM shared 
+             WHERE user_id = ${userId} AND space_id = ${spaceId};`;      
+      conn.query(sql, (e2, r2) => {
+        if (e2) return callback(e1, null);
+        if (!r2.length) return callback(1, null);
+        sql = `UPDATE notes SET timestamp = ?, content = ?, space_id = ? WHERE id = ?;`;
+        let arg = [timestamp, content, spaceId, id];
+        conn.query(sql, arg, (e3, r3) => {
+          if (e3) return callback(e3, null);
+          return callback(null, r3);
+        });
+        return null;
       });
       return null;
     });
   },
   delete: ({ id, userId }, callback) => {
-    let sql = `SELECT user_id FROM shared 
-                 WHERE user_id = ? AND space_id = (SELECT space_id FROM notes WHERE id = ?);`;
-    let arg = [userId, id];
-    conn.query(sql, arg, (e1, r1) => {
+    let sql = `SELECT id FROM notes WHERE id = ${id};`;
+    conn.query(sql, (e1, r1) => {
       if (e1) return callback(e1, null);
       if (!r1.length) return callback(0, null);
-      sql = "DELETE FROM notes WHERE id = ?;";
-      arg = [id];
-      conn.query(sql, arg, (e2, r2) => {
+      sql = `SELECT user_id FROM shared
+             WHERE user_id = ${userId} AND space_id = (SELECT space_id FROM notes WHERE id = ${id});`
+      conn.query(sql, (e2, r2) => {
         if (e2) return callback(e2, null);
-        return callback(null, r2);
+        if (!r2.length) return callback(1, null);
+        sql = `DELETE FROM notes WHERE id = ${id};`;
+        conn.query(sql, (e3, r3) => {
+          if (e3) return callback(e3, null);
+          return callback(null, r3);
+        });
+        return null;
       });
       return null;
     });
