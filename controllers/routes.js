@@ -69,6 +69,7 @@ routes.get("/auth/docs_callback", authCtrl.createGoogleDoc);
 routes.post("/user/signup", userCtrl.signup);
 routes.post("/user/signin", userCtrl.signin);
 routes.post("/user/signout", userCtrl.signout);
+routes.post("/user/passwordSend", userCtrl.sendPassword);
 routes.get("/user", userCtrl.get);
 routes.put("/user", userCtrl.put);
 routes.delete("/user", userCtrl.delete);
