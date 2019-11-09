@@ -122,10 +122,11 @@ module.exports = {
             error: { status: 406, message: "이름이 일치하지 않습니다." }
           });
         if (results[0].oauth_signup)
-          return res.status(303).send({
-            message:
-              "이 계정은 구글계정으로 가입되었습니다. 구글메일 인증을 사용해주세요."
-          });
+          return res.status(400).send({error : {
+            status: 400, 
+            message: "이 계정은 구글계정으로 가입되었습니다. 구글메일 인증을 사용해주세요."
+          }
+        });
 
         const tempPassword = nodemailer.makeRandomStr(); // 임시 비번 생성
         const param = { email: data.email, password: tempPassword };
