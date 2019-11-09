@@ -27,20 +27,25 @@ module.exports = {
   },
 
   createGoogleDoc: (req, res) => {
+    const redirectUrl = process.env.CLNT_ADDRESS;
     try {
       // 문서를 만들고 싶은 space의 정보를 일단 db에서 가져온다. 아까 세션에 저장한 space_id를 사용한다.
       let sql = `SELECT * FROM spaces WHERE id = ${req.session.space_id}`;
       conn.query(sql, (e1, r1) => {
-        if (e1) throw new Error(e1);
+        // db쪽에 에러가 나면, 500코드로 처리해 보내준다
+        if (e1) return res.redirect(500, redirectUrl);
         const { name, url } = r1[0]; // 해당 스페이스의 이름, url
         // 그 이후로 해당 스페이스의 모든 노트를 db에서 가져온다.
         sql = `SELECT * FROM notes WHERE space_id = ${req.session.space_id}`;
+
         conn.query(sql, async (e2, r2) => {
-          if (e2) throw new Error(e2);
+          if (e2) return res.redirect(500, redirectUrl); // 다시 한번 500으로 에러 처리
           r2.sort(
             (a, b) =>
               a.timestamp.replace(/:/g, "") - b.timestamp.replace(/:/g, "")
           ); // 시간순으로 모든 노트를 정렬한다.
+
+          // Google Docs와 연결하는 절차
           const oauth2Client = req.app.get("docsClient");
           // 콜백url의 query string에 ?code={authCode} 이렇게 넘어오는데, 이 코드를 사용해
           // google doc만들기에 사용될 토큰을 발급받는다.
@@ -59,6 +64,7 @@ module.exports = {
             }
           });
           const { documentId } = createResponse.data;
+
           // 방금 생성 Google doc에다 노트를 추가
           await docs.documents.batchUpdate({
             documentId,
@@ -67,7 +73,7 @@ module.exports = {
                 {
                   // 첫번쨰 줄 (영상 url 정보)
                   insertText: {
-                    text: `The video for these notes can be found at: ${url}\n`,
+                    text: `The video can be found at: ${url}\n\n`,
                     endOfSegmentLocation: {
                       segmentId: ""
                     }
@@ -76,30 +82,21 @@ module.exports = {
                 // 각자 노트마다 새롭게 문서에 text를 추가하기
                 ...r2.map(note => ({
                   insertText: {
-                    text: `${note.timestamp}: ${note.content}\n`,
+                    text: `■ ${note.timestamp} - ${note.content}\n\n`,
                     endOfSegmentLocation: {
                       segmentId: ""
                     }
                   }
-                })),
-                {
-                  // 글머리 기호 (bullet point를 \n마다 생성하기)
-                  createParagraphBullets: {
-                    range: {
-                      startIndex: 1,
-                      endIndex: 165 // Change to the length of all notes combined
-                    },
-                    bulletPreset: "BULLET_DISC_CIRCLE_SQUARE"
-                  }
-                }
+                }))
               ]
             }
           });
-          res.redirect(`http://localhost:3000/spaces/${name}`);
+          return res.redirect(`${redirectUrl}/spaces/${name}`);
         });
       });
     } catch (error) {
-      res.redirect("http://localhost:3000/home");
+      // 만약 실행된 프로미스 중에 에러가 난다면, 바로 500 response로 리디렉트
+      return res.redirect(500, redirectUrl);
     }
   }
 };
